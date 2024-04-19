@@ -276,7 +276,11 @@ open class BaseRecyclerViewItemAnimator() : SimpleItemAnimator() {
 
         resetAnimation(holder)
 
-        prepareHolderForMoveAnimation(holder, holderPrevProps, fromX, fromY, toX, toY)
+        if (!prepareHolderForMoveAnimation(
+            holder, holderPrevProps, fromX, fromY, toX, toY
+        )) {
+            return false
+        }
 
         mPendingMoves.add(MoveInfo(holder, fromX, fromY, toX, toY))
 
@@ -470,7 +474,6 @@ open class BaseRecyclerViewItemAnimator() : SimpleItemAnimator() {
                 }
 
                 override fun onAnimationCancel(animation: Animator) {
-                    Log.d("TEST", "ChangeAnimation.onAnimationCancel(): oldHolder;")
                     onAnimateChangeCancelled(view)
                 }
 
@@ -497,7 +500,6 @@ open class BaseRecyclerViewItemAnimator() : SimpleItemAnimator() {
                     }
 
                     override fun onAnimationCancel(animation: Animator) {
-                        Log.d("TEST", "ChangeAnimation.onAnimationCancel(): newHolder;")
                         onAnimateChangeCancelled(newView)
                     }
 
