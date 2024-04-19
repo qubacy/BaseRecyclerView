@@ -9,9 +9,49 @@
     <com.qubacy.utility.baserecyclerview.view.BaseRecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/button_add"
+        android:layout_marginBottom="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:itemCount="3"
         tools:listitem="@layout/component_list_item"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_update_last"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/button_add"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/button_move_last"
+        android:text="UPDATE"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_move_last"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/button_add"
+        app:layout_constraintEnd_toStartOf="@id/button_remove_last"
+        app:layout_constraintStart_toEndOf="@id/button_update_last"
+        android:text="MOVE"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_remove_last"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/button_add"
+        app:layout_constraintEnd_toStartOf="@id/button_add"
+        app:layout_constraintStart_toEndOf="@id/button_move_last"
+        android:text="REMOVE"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/button_remove_last"
+        android:layout_marginBottom="8dp"
+        android:text="ADD" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

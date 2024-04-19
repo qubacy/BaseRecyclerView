@@ -35,4 +35,42 @@ class CustomRecyclerViewAdapter(
 
         wrappedNotifyItemRangeInserted(0, items.size)
     }
+
+    @UiThread
+    fun addItem(item: CustomRecyclerViewItemData) {
+        mItems.add(item)
+
+        wrappedNotifyItemInserted(mItems.size - 1)
+    }
+
+    @UiThread
+    fun removeLastItem() {
+        if (mItems.isEmpty()) return
+
+        mItems.removeLast()
+
+        wrappedNotifyItemRemoved(mItems.size)
+    }
+
+    @UiThread
+    fun moveLastToTop() {
+        val itemCount = mItems.size
+
+        if (itemCount < 2) return
+
+        val lastItem = mItems.removeLast()
+
+        mItems.add(0, lastItem)
+
+        wrappedNotifyItemMoved(itemCount - 1, 0)
+    }
+
+    @UiThread
+    fun updateItemAtPosition(position: Int, updatedItem: CustomRecyclerViewItemData) {
+        if (mItems.size <= position) return
+
+        mItems[position] = updatedItem
+
+        wrappedNotifyItemChanged(position)
+    }
 }

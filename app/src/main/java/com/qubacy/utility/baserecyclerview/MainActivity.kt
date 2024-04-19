@@ -2,42 +2,61 @@ package com.qubacy.utility.baserecyclerview
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.qubacy.utility.baserecyclerview.adapter.BaseRecyclerViewAdapter
 import com.qubacy.utility.baserecyclerview.component.list.adapter.CustomRecyclerViewAdapter
 import com.qubacy.utility.baserecyclerview.component.list.adapter.producer.CustomRecyclerViewItemViewProviderProducer
 import com.qubacy.utility.baserecyclerview.component.list.item.data.CustomRecyclerViewItemData
+import com.qubacy.utility.baserecyclerview.databinding.ActivityMainBinding
 import com.qubacy.utility.baserecyclerview.item.animator.BaseRecyclerViewItemAnimator
-import com.qubacy.utility.baserecyclerview.view.BaseRecyclerView
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        val ITEM = CustomRecyclerViewItemData("test")
+
+        val ITEMS = listOf(ITEM, ITEM, ITEM)
+    }
+
+    private lateinit var mBinding: ActivityMainBinding
     private lateinit var mAdapter: CustomRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_main)
+        mBinding = ActivityMainBinding.inflate(layoutInflater)
 
-        val recyclerView = findViewById<BaseRecyclerView>(R.id.list)
+        setContentView(mBinding.root)
 
-        initList(recyclerView)
+        initList()
+        initUiControls()
     }
 
-    private fun initList(recyclerView: BaseRecyclerView) {
+    private fun initList() {
         mAdapter = CustomRecyclerViewAdapter(CustomRecyclerViewItemViewProviderProducer())
 
-        recyclerView.apply {
+        mBinding.list.apply {
             adapter = mAdapter
             itemAnimator = BaseRecyclerViewItemAnimator()
+        }
+    }
+
+    private fun initUiControls() {
+        mBinding.buttonAdd.setOnClickListener {
+            mAdapter.addItem(ITEM)
+        }
+        mBinding.buttonRemoveLast.setOnClickListener {
+            mAdapter.removeLastItem()
+        }
+        mBinding.buttonMoveLast.setOnClickListener {
+            mAdapter.moveLastToTop()
+        }
+        mBinding.buttonUpdateLast.setOnClickListener {
+            mAdapter.updateItemAtPosition(
+                mAdapter.itemCount - 1, ITEM.copy("updated item"))
         }
     }
 
     override fun onStart() {
         super.onStart()
 
-        mAdapter.setItems(listOf(
-            CustomRecyclerViewItemData("test 1"),
-            CustomRecyclerViewItemData("test 2"),
-            CustomRecyclerViewItemData("test 3")
-        ))
+        mAdapter.setItems(ITEMS)
     }
 }
