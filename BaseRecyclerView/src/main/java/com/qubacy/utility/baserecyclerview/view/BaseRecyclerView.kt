@@ -61,7 +61,6 @@ open class BaseRecyclerView(
         super.onScrolled(dx, dy)
 
         checkIsEndReached()
-
     }
 
     @CallSuper
@@ -75,10 +74,10 @@ open class BaseRecyclerView(
             return true
         }
 
-        when (layoutManager::class) {
-            LinearLayoutManager::class ->
-                checkLinearLayoutManagerForEndReach(layoutManager as LinearLayoutManager, adapter)
-            else -> return false
+        if (layoutManager is LinearLayoutManager) {
+            checkLinearLayoutManagerForEndReach(layoutManager, adapter)
+        } else {
+            return false
         }
 
         return true
