@@ -18,6 +18,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var mAdapter: CustomRecyclerViewAdapter
 
+    private var mLastRecyclerViewIsEnabled: Boolean = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -44,6 +46,9 @@ class MainActivity : AppCompatActivity() {
         }
         mBinding.buttonRemoveLast.setOnClickListener {
             mAdapter.removeLastItem()
+            mLastRecyclerViewIsEnabled = !mLastRecyclerViewIsEnabled
+
+            mBinding.list.setIsEnabled(mLastRecyclerViewIsEnabled)
         }
         mBinding.buttonMoveLast.setOnClickListener {
             mAdapter.moveLastToTop()

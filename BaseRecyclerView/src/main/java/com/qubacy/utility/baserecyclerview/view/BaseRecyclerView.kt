@@ -3,11 +3,13 @@ package com.qubacy.utility.baserecyclerview.view
 import android.content.Context
 import android.util.AttributeSet
 import androidx.annotation.CallSuper
+import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.qubacy.utility.baserecyclerview.adapter.BaseRecyclerViewAdapter
+import com.qubacy.utility.baserecyclerview.view.layoutmanager._common.BaseRecyclerViewLayoutManager
 
-class BaseRecyclerView(
+open class BaseRecyclerView(
     context: Context,
     attrs: AttributeSet
 ) : RecyclerView(context, attrs) {
@@ -21,6 +23,18 @@ class BaseRecyclerView(
 
     fun setCallback(callback: BaseRecyclerViewCallback) {
         mCallback = callback
+    }
+
+    fun setIsEnabled(isEnabled: Boolean) {
+        val layoutManager = layoutManager
+
+        if (layoutManager !is BaseRecyclerViewLayoutManager)
+            throw IllegalStateException(
+                "layoutManager isn't a descendant of BaseRecyclerViewLayoutManager!")
+
+        layoutManager.setScrollEnabled(isEnabled)
+
+        for (child in children) child.isEnabled = isEnabled
     }
 
     fun isAtStart(): Boolean {
