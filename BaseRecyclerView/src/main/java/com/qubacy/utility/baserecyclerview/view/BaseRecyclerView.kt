@@ -34,7 +34,12 @@ open class BaseRecyclerView(
 
         layoutManager.setScrollEnabled(isEnabled)
 
-        for (child in children) child.isEnabled = isEnabled
+        setChildrenEnabled(isEnabled)
+    }
+
+    protected open fun setChildrenEnabled(areEnabled: Boolean) {
+        for (child in children)
+            child.isEnabled = isEnabled
     }
 
     fun isAtStart(): Boolean {
