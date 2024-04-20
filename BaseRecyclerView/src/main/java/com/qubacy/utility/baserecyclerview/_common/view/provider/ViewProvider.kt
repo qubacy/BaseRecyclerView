@@ -4,4 +4,5 @@ import android.view.View
 
 interface ViewProvider {
     fun getView(): View
+    fun setEnabled(isEnabled: Boolean) {  }
 }

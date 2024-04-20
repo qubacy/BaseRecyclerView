@@ -38,8 +38,7 @@ open class BaseRecyclerView(
     }
 
     protected open fun setChildrenEnabled(areEnabled: Boolean) {
-        for (child in children)
-            child.isEnabled = isEnabled
+        for (child in children) child.isEnabled = isEnabled
     }
 
     fun isAtStart(): Boolean {
