@@ -46,11 +46,9 @@ open class BaseRecyclerView(
 
         if (layoutManager == null) return false
 
-        return when (layoutManager::class) {
-            LinearLayoutManager::class ->
-                checkLinearLayoutManagerIsAtStart(layoutManager as LinearLayoutManager)
-            else -> false
-        }
+        return if (layoutManager::class.java.isAssignableFrom(LinearLayoutManager::class.java)) {
+            checkLinearLayoutManagerIsAtStart(layoutManager as LinearLayoutManager)
+        } else false
     }
 
     private fun checkLinearLayoutManagerIsAtStart(layoutManager: LinearLayoutManager): Boolean {
