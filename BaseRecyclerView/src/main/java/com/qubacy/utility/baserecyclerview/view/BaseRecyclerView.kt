@@ -9,7 +9,7 @@ import com.qubacy.utility.baserecyclerview.adapter.BaseRecyclerViewAdapter
 
 class BaseRecyclerView(
     context: Context,
-    attrs: AttributeSet
+    attrs: AttributeSet? = null
 ) : RecyclerView(context, attrs) {
     companion object {
         const val TAG = "BaseRecyclerView"
