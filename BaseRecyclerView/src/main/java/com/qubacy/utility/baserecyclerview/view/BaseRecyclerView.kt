@@ -3,11 +3,13 @@ package com.qubacy.utility.baserecyclerview.view
 import android.content.Context
 import android.util.AttributeSet
 import androidx.annotation.CallSuper
+import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.qubacy.utility.baserecyclerview.adapter.BaseRecyclerViewAdapter
+import com.qubacy.utility.baserecyclerview.view.layoutmanager._common.BaseRecyclerViewLayoutManager
 
-class BaseRecyclerView(
+open class BaseRecyclerView(
     context: Context,
     attrs: AttributeSet? = null
 ) : RecyclerView(context, attrs) {
@@ -23,16 +25,30 @@ class BaseRecyclerView(
         mCallback = callback
     }
 
+    fun setIsEnabled(isEnabled: Boolean) {
+        val layoutManager = layoutManager
+
+        if (layoutManager !is BaseRecyclerViewLayoutManager)
+            throw IllegalStateException(
+                "layoutManager isn't a descendant of BaseRecyclerViewLayoutManager!")
+
+        layoutManager.setScrollEnabled(isEnabled)
+
+        setChildrenEnabled(isEnabled)
+    }
+
+    protected open fun setChildrenEnabled(areEnabled: Boolean) {
+        for (child in children) child.isEnabled = isEnabled
+    }
+
     fun isAtStart(): Boolean {
         val layoutManager = layoutManager
 
         if (layoutManager == null) return false
 
-        return when (layoutManager::class) {
-            LinearLayoutManager::class ->
-                checkLinearLayoutManagerIsAtStart(layoutManager as LinearLayoutManager)
-            else -> false
-        }
+        return if (layoutManager::class.java.isAssignableFrom(LinearLayoutManager::class.java)) {
+            checkLinearLayoutManagerIsAtStart(layoutManager as LinearLayoutManager)
+        } else false
     }
 
     private fun checkLinearLayoutManagerIsAtStart(layoutManager: LinearLayoutManager): Boolean {
@@ -45,7 +61,6 @@ class BaseRecyclerView(
         super.onScrolled(dx, dy)
 
         checkIsEndReached()
-
     }
 
     @CallSuper
@@ -59,10 +74,10 @@ class BaseRecyclerView(
             return true
         }
 
-        when (layoutManager::class) {
-            LinearLayoutManager::class ->
-                checkLinearLayoutManagerForEndReach(layoutManager as LinearLayoutManager, adapter)
-            else -> return false
+        if (layoutManager is LinearLayoutManager) {
+            checkLinearLayoutManagerForEndReach(layoutManager, adapter)
+        } else {
+            return false
         }
 
         return true

@@ -2,13 +2,15 @@ package com.qubacy.utility.baserecyclerview
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.qubacy.utility.baserecyclerview.component.list.adapter.CustomRecyclerViewAdapter
 import com.qubacy.utility.baserecyclerview.component.list.adapter.producer.CustomRecyclerViewItemViewProviderProducer
 import com.qubacy.utility.baserecyclerview.component.list.item.data.CustomRecyclerViewItemData
 import com.qubacy.utility.baserecyclerview.databinding.ActivityMainBinding
 import com.qubacy.utility.baserecyclerview.item.animator.BaseRecyclerViewItemAnimator
+import com.qubacy.utility.baserecyclerview.view.BaseRecyclerViewCallback
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), BaseRecyclerViewCallback {
     companion object {
         val ITEM = CustomRecyclerViewItemData("test")
 
@@ -17,6 +19,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var mAdapter: CustomRecyclerViewAdapter
+
+    private var mLastRecyclerViewIsEnabled: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +39,8 @@ class MainActivity : AppCompatActivity() {
         mBinding.list.apply {
             adapter = mAdapter
             itemAnimator = BaseRecyclerViewItemAnimator()
+
+            setCallback(this@MainActivity)
         }
     }
 
@@ -44,6 +50,9 @@ class MainActivity : AppCompatActivity() {
         }
         mBinding.buttonRemoveLast.setOnClickListener {
             mAdapter.removeLastItem()
+            mLastRecyclerViewIsEnabled = !mLastRecyclerViewIsEnabled
+
+            mBinding.list.setIsEnabled(mLastRecyclerViewIsEnabled)
         }
         mBinding.buttonMoveLast.setOnClickListener {
             mAdapter.moveLastToTop()
@@ -58,5 +67,9 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
 
         mAdapter.setItems(ITEMS)
+    }
+
+    override fun onEndReached() {
+        Log.d("TEST", "onEndReached(): entering..")
     }
 }
